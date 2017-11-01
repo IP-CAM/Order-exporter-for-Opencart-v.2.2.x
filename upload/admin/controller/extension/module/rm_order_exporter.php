@@ -9,12 +9,26 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
 
         $this->document->setTitle($this->language->get('heading_title'));
 
-        // set language data
-        //$variables = array(
-            //'heading_title',
-            //'heading_title_version',
-        //);
-        //foreach($variables as $variable) $data[$variable] = $this->language->get($variable);
+        $variables = array(
+            'heading_title',
+            'heading_title_version'
+        );
+        foreach($variables as $variable) $data[$variable] = $this->language->get($variable);
+
+        $data['breadcrumbs'] = array(
+            array(
+                'text'      => $this->language->get('text_home'),
+                'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
+            ),
+            array(
+                'text'      => $this->language->get('text_module'),
+                'href'      => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
+            ),
+            array(
+                'text'      => $this->language->get('heading_title'),
+                'href'      => $this->url->link('extension/module/excelport', 'token=' . $this->session->data['token'], 'SSL')
+            )
+        );
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
