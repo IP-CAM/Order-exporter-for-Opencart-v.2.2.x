@@ -11,7 +11,7 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         // 设置文档标题
         $this->document->setTitle($this->language->get('heading_title'));
 
-        // 设置模板变量
+        // 读取语言文件设置模板变量
         $variables = array(
             'heading_title',
             'heading_title_version',
@@ -23,15 +23,15 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         $data['breadcrumbs'] = array(
             array(
                 'text'      => $this->language->get('text_home'),
-                'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL')
+                'href'      => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
             ),
             array(
-                'text'      => $this->language->get('text_module'),
-                'href'      => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
+                'text'      => $this->language->get('text_extension'),
+                'href'      => $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', true)
             ),
             array(
                 'text'      => $this->language->get('heading_title'),
-                'href'      => $this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], 'SSL')
+                'href'      => $this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], true)
             )
         );
 
