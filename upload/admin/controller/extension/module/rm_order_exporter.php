@@ -14,7 +14,8 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         // 设置模板变量
         $variables = array(
             'heading_title',
-            'heading_title_version'
+            'heading_title_version',
+            'form_title',
         );
         foreach($variables as $variable) $data[$variable] = $this->language->get($variable);
 
@@ -30,9 +31,19 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
             ),
             array(
                 'text'      => $this->language->get('heading_title'),
-                'href'      => $this->url->link('extension/module/excelport', 'token=' . $this->session->data['token'], 'SSL')
+                'href'      => $this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], 'SSL')
             )
         );
+
+        // Error Warning
+        if (isset($this->error['warning'])) {
+            $data['error_warning'] = $this->error['warning'];
+        } else {
+            $data['error_warning'] = '';
+        }
+
+        // 设置form提交地址
+        $data['action'] = $this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], true);
 
         // 导入各个部分的模板
         $data['header'] = $this->load->controller('common/header');
