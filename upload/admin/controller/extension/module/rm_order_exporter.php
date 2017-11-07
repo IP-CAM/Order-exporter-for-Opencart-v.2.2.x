@@ -16,6 +16,10 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
             'heading_title',
             'heading_title_version',
             'form_title',
+            'order_ids',
+            'order_type',
+            'type_csv',
+            'type_excel',
         );
         foreach($variables as $variable) $data[$variable] = $this->language->get($variable);
 
@@ -40,6 +44,18 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
             $data['error_warning'] = $this->error['warning'];
         } else {
             $data['error_warning'] = '';
+        }
+        // Error ids 
+        if (isset($this->error['orderIds'])) {
+            $data['error_orderIds'] = $this->error['orderIds'];
+        } else {
+            $data['error_orderIds'] = '';
+        }
+        // Error type 
+        if (isset($this->error['orderType'])) {
+            $data['error_orderType'] = $this->error['orderType'];
+        } else {
+            $data['error_orderType'] = '';
         }
 
         // 设置form提交地址

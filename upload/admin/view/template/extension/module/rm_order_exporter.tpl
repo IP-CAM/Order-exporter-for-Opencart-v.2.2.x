@@ -22,10 +22,45 @@
       <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $form_title; ?></h3>
       </div>
+      <!-- panel body -->
       <div class="panel-body">
-        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-account" class="form-horizontal">
+        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-exporter" class="form-horizontal">
+          <!-- form group -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-ids"><?php echo $order_ids; ?></label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="ids" id="input-ids" value="" placeholder="<?php echo $order_ids; ?>" />
+              <?php if ($error_orderIds) { ?>
+              <div class="text-danger"><?php echo $error_orderIds; ?></div>
+              <?php } ?>
+            </div>
+          </div>
+          <!-- form group end -->
+          <!-- form group -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-type"><?php echo $order_type; ?></label>
+            <div class="col-sm-10">
+              <select name="type" id="input-type" class="form-control">
+                <option value="csv" selected="selected"><?php echo $type_csv; ?></option>
+                <option value="excel"><?php echo $type_excel; ?></option>
+              </select>
+              <?php if ($error_orderType) { ?>
+              <div class="text-danger"><?php echo $error_orderType; ?></div>
+              <?php } ?>
+            </div>
+          </div>
+          <!-- form group end -->
+          <!-- form group -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-submit"></label>
+            <div class="col-sm-10">
+              <input type="submit" class="form-control" id="input-submit" value="Export" />
+            </div>
+          </div>
+          <!-- form group end -->
         </form>
       </div>
+      <!-- panel body end -->
     </div>
   </div>
 </div>
