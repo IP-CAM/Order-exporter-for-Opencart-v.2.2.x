@@ -10,3 +10,7 @@ $_['order_ids']                         = 'Order IDs';
 $_['order_type']                        = 'Export Type';
 $_['type_csv']                          = 'Csv';
 $_['type_excel']                        = 'Excel';
+
+// Error
+$_['error_orderIds_empty']              = 'Warning: Order IDs can not be empty.';
+$_['error_permission']                  = 'Warning: You do not have permissoin to modify RM Order Exporter';

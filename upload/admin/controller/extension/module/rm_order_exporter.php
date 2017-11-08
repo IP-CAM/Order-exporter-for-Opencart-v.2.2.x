@@ -20,6 +20,8 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
             'order_type',
             'type_csv',
             'type_excel',
+            'error_orderIds_empty',
+            'error_permission',
         );
         foreach($variables as $variable) $data[$variable] = $this->language->get($variable);
 
@@ -59,7 +61,7 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         }
 
         // 设置form提交地址
-        $data['action'] = $this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], true);
+        $data['action'] = $this->url->link('extension/module/rm_order_exporter/export', 'token=' . $this->session->data['token'], true);
 
         // 导入各个部分的模板
         $data['header'] = $this->load->controller('common/header');
@@ -68,6 +70,59 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
 
         // 输出模板
         $this->response->setOutput($this->load->view('extension/module/rm_order_exporter.tpl', $data));
+    }
+
+    public function export() {
+        $data = array();
+
+        $id_string = $this->request->post['ids'];
+        $type = $this->request->post['type'];
+
+        if (empty($id_string)) {
+            // TODO Add Error Notification
+            //$this->error['warning'] = $this->language->get('error_orderIds_empty');
+            $this->response->redirect($this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], true));
+        }
+
+        $ids = $this->explode_ids($id_string);
+
+        var_dump($ids);
+        var_dump($type);
+    }
+
+    private function explode_ids($ids_string) {
+        $ids = explode(',', $ids_string);
+        foreach ($ids as $key => $id) {
+            # trim space for id
+            $id = trim($id);
+            # remove m-n element
+            unset($ids[$key]);
+            if (strpos($id, '-') != false) {
+                # process m-n format
+                # get m & n as $start & $end
+                list($start, $end) = explode('-', $id);
+                # $end is less than $start then swap them
+                if ($end < $start) list($start, $end) = array($end, $start);
+                # push m-n items to result
+                for ($i = $start; $i <= $end; $i++) {
+                    array_push($ids, (int)$i);
+                }
+            } else {
+                # process m format
+                array_push($ids, (int)$id);
+            }
+        }
+        # sort ids
+        sort($ids);
+        return $ids;
+    }
+
+    protected function validate() {
+        if (!$this->user->hasPermission('modify', 'extension/module/rm_order_exporter')) {
+            $this->error['warning'] = $this->language->get('error_permission');
+        }
+
+        return !$this->error;
     }
 
     public function install() {
