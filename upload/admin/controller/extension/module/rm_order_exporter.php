@@ -88,9 +88,17 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         // CHECK ids
         //var_dump($ids);
         $orders = $this->load_orders($ids);
-        var_dump($orders);
+        // CHECK orders
+        //var_dump($orders);
+        // CHECK type
+        //var_dump($type);
+        if ($type == 'csv') {
+            $this->export_csv($orders);
+        } elseif ($type == 'excel') {
+        } else {
+            $this->response->redirect($this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], true));
+        }
 
-        var_dump($type);
     }
 
     private function load_orders($orderIdArray) {
@@ -135,6 +143,33 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         }
 
         return !$this->error;
+    }
+
+    private function _header() {
+        header('Cache-Control: max-age=0');
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Pragma: public'); // HTTP/1.0
+        header('Content-Type: text/csv'); // setting in subclass
+        header('Content-Disposition: attachment;filename="address-list-'.date('Y_m_d_H_i_s').'.csv"'); // setting in subclass
+    }
+
+    private function export_csv($data) {
+        $output = "OrderNo, Name, Address, City, Province, Post, Country, Tel" . PHP_EOL;
+        foreach($data as $item) {
+            $output .= $item['order_id'].',';
+            $output .= $item['shipping_firstname']. ' '. $item['shipping_lastname'].',';
+            $output .= $item['shipping_address_1']. ' '. $item['shipping_address_2'].',';
+            $output .= $item['shipping_city'].',';
+            $output .= $item['shipping_zone'].',';
+            $output .= $item['shipping_postcode'].',';
+            $output .= $item['shipping_country'].',';
+            $output .= $item['telephone'].',';
+            $output .= PHP_EOL;
+        }
+        $this->_header();
+        echo $output;
+        exit;
     }
 
     public function install() {
