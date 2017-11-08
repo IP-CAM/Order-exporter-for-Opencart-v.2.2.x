@@ -29,7 +29,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-ids"><?php echo $order_ids; ?></label>
             <div class="col-sm-10">
-              <input class="form-control" type="text" name="ids" id="input-ids" value="" placeholder="<?php echo $order_ids; ?>" />
+              <textarea class="form-control" name="ids" id="input-ids" value="" placeholder="<?php echo $order_ids; ?>"></textarea>
               <?php if ($error_orderIds) { ?>
               <div class="text-danger"><?php echo $error_orderIds; ?></div>
               <?php } ?>
