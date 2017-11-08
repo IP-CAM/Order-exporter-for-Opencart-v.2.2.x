@@ -85,9 +85,21 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         }
 
         $ids = $this->explode_ids($id_string);
+        // CHECK ids
+        //var_dump($ids);
+        $orders = $this->load_orders($ids);
+        var_dump($orders);
 
-        var_dump($ids);
         var_dump($type);
+    }
+
+    private function load_orders($orderIdArray) {
+        $this->load->model('sale/order');
+        $orders = array();
+        foreach ($orderIdArray as $orderId) {
+            array_push($orders, $this->model_sale_order->getOrder($orderId));
+        }
+        return $orders;
     }
 
     private function explode_ids($ids_string) {
