@@ -95,17 +95,38 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         if ($type == 'csv') {
             $this->export_csv($orders);
         } elseif ($type == 'excel') {
+            $this->export_excel($orders);
         } else {
             $this->response->redirect($this->url->link('extension/module/rm_order_exporter', 'token=' . $this->session->data['token'], true));
         }
-
     }
 
     private function load_orders($orderIdArray) {
         $this->load->model('sale/order');
-        $orders = array();
+        $this->load->model('catalog/product');
+
+        $orders= array();
         foreach ($orderIdArray as $orderId) {
-            array_push($orders, $this->model_sale_order->getOrder($orderId));
+            $order = $this->model_sale_order->getOrder($orderId);
+            $order_products = $this->model_sale_order->getOrderProducts($orderId);
+            $products = array();
+            // Get product infomation
+            for($i=0; $i<count($order_products); $i++) {
+                $order_product = $order_products[$i];
+                $product = $this->model_catalog_product->getProduct($order_product['product_id']);
+                $product_images = $this->model_catalog_product->getProductImages($order_product['product_id']);
+                if (count($product_images) > 0) {
+                    $product['image'] = DIR_IMAGE . $product_images[0]['image'];
+                } else {
+                    $product['image'] = DIR_IMAGE . 'no_image.png';
+                }
+                // TODO add size info
+                $product['size'] = '';
+
+                $products[$i] = array_merge($order_product, $product);
+            }
+            $order['products'] = $products;
+            array_push($orders, $order);
         }
         return $orders;
     }
@@ -145,11 +166,11 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         return !$this->error;
     }
 
-    private function _header() {
+    private function csv_header() {
         header('Cache-Control: max-age=0');
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Pragma: public'); // HTTP/1.0
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header('Pragma: public'); // HTTP/1.0
         header('Content-Type: text/csv'); // setting in subclass
         header('Content-Disposition: attachment;filename="address-list-'.date('Y_m_d_H_i_s').'.csv"'); // setting in subclass
     }
@@ -167,8 +188,77 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
             $output .= $item['telephone'].',';
             $output .= PHP_EOL;
         }
-        $this->_header();
+        $this->csv_header();
         echo $output;
+        exit;
+    }
+
+    private function excel_header() {
+        header('Cache-Control: max-age=0');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header('Pragma: public'); // HTTP/1.0
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); // setting in subclass
+        header('Content-Disposition: attachment;filename="address-list-'.date('Y_m_d_H_i_s').'.xlsx"'); // setting in subclass
+    }
+
+    private function export_excel($data) {
+    	require_once(substr(DIR_APPLICATION, 0, strrpos(DIR_APPLICATION, '/', -2)). '/'. "vendors/PHPExcel/PHPExcel.php");
+        //Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+                    
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Richard Ma")
+                ->setLastModifiedBy("Richard Ma")
+                ->setTitle("Office 2007 XLSX Test Document")
+                ->setSubject("Office 2007 XLSX Test Document")
+                ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                ->setKeywords("office 2007 openxml php")
+                ->setCategory("Test result file");
+                                                                                                                                                                                                                                                                       
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        // Add some data
+        $delta = 6;
+        $start = 1;
+        foreach ($data as $order) {
+            foreach($order['products'] as $product) {
+                $size = 'N/A';
+        		$end = $start + $delta - 1;
+                $objPHPExcel->getActiveSheet()
+                        ->mergeCells('A'.$start.':A'.$end.'')
+                        ->setCellValue('A'.$start.'', $order['order_id'])
+    
+                        ->setCellValue('B'.$start.'', $product['size'])
+                        ->mergeCells('B'.(string)($start+1).':B'.$end.'')
+                        ->setCellValue('C'.$start.'', $order['shipping_firstname'] . ' ' . $order['shipping_lastname'])
+                        ->setCellValue('C'.(string)($start + 1).'', $order['shipping_address_1'])
+                        ->setCellValue('C'.(string)($start + 2).'', $order['shipping_address_2'])
+                        ->setCellValue('C'.(string)($start + 3).'', $order['shipping_city']. ', ' .$order['shipping_zone']. ' ' .$order['shipping_postcode'])
+                        ->setCellValue('C'.(string)($start + 4).'', $order['shipping_country'])
+                        ->setCellValue('C'.(string)($start + 5).'', $order['telephone'])
+                        ->setCellValue('D'.$start.'', $product['name'])
+                        ->setCellValue('D'.(string)($start + 1).'', 'Qty: '.$product['quantity'])
+                        ->setCellValue('D'.(string)($start + 2).'', 'SKU: '.$product['sku'])
+                        ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                // add picture
+                $imagePath = $product['image'];
+                
+                $objDrawing = new PHPExcel_Worksheet_Drawing();
+                $objDrawing->setPath($imagePath);
+                $objDrawing->setCoordinates('B'.(string)($start+1));
+                $objDrawing->setHeight(80);
+                $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                $start = $start + $delta;
+            }
+        }
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Orders');
+        $this->excel_header();
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
         exit;
     }
 
