@@ -107,6 +107,7 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
 
         $orders= array();
         foreach ($orderIdArray as $orderId) {
+            // TODO 检测ID对应的订单是否存在
             $order = $this->model_sale_order->getOrder($orderId);
             $order_products = $this->model_sale_order->getOrderProducts($orderId);
             $products = array();
