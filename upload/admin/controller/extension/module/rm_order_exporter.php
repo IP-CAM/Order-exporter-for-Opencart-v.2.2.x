@@ -200,7 +200,7 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
         header('Pragma: public'); // HTTP/1.0
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); // setting in subclass
-        header('Content-Disposition: attachment;filename="address-list-'.date('Y_m_d_H_i_s').'.xlsx"'); // setting in subclass
+        header('Content-Disposition: attachment;filename="order-list-'.date('Y_m_d_H_i_s').'.xlsx"'); // setting in subclass
     }
 
     private function export_excel($data) {
