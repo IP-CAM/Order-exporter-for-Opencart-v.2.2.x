@@ -8,8 +8,8 @@ $_['form_title']                        = 'Order Options';
 $_['text_extension']                    = 'Extensions';
 $_['order_ids']                         = 'Order IDs';
 $_['order_type']                        = 'Export Type';
-$_['type_csv']                          = 'Csv';
-$_['type_excel']                        = 'Excel';
+$_['type_csv']                          = 'Csv-Address';
+$_['type_excel']                        = 'Excel-Order';
 
 // Error
 $_['error_orderIds_empty']              = 'Warning: Order IDs can not be empty.';
