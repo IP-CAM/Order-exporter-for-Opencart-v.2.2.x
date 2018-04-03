@@ -3,7 +3,7 @@
 rm rm-order-exporter.ocmod.zip
 
 # Replace modifycation ID
-sed "s/<code>.*<\/code>/<code><\!\[CDATA\[`git rev-parse HEAD`\]\]><\/code>/g" install.xml.tpl > install.xml
+sed "s/<code>.*<\/code>/<code><\!\[CDATA\[`git rev-parse HEAD`-`date +%s`\]\]><\/code>/g" install.xml.tpl > install.xml
 
 zip rm-order-exporter.ocmod.zip \
     install.xml \
