@@ -19,4 +19,5 @@ vqmod/vqcache/*
 vqmod/checked.cache
 vqmod/mods.cache
 
-*.zip
+# package file
+rm-order-exporter.ocmod.zip
