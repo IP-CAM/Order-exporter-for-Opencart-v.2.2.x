@@ -24,7 +24,7 @@
       </div>
       <!-- panel body -->
       <div class="panel-body">
-        <form method="post" enctype="multipart/form-data" id="form-exporter" class="form-horizontal">
+        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-exporter" class="form-horizontal">
           <!-- form group -->
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-ids"><?php echo $order_ids; ?></label>
@@ -40,8 +40,8 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-submit"></label>
             <div class="col-sm-10">
-              <input type="submit" class="form-control" id="csv-submit" value="Export Address (csv)" />
-              <input type="submit" class="form-control" id="excel-submit" value="Export Order (excel)" />
+              <input type="submit" class="btn btn-primary" id="csv-submit" value="Export Address (csv)" />
+              <input type="submit" class="btn btn-primary" id="excel-submit" value="Export Order (excel)" />
             </div>
           </div>
           <!-- form group end -->
@@ -72,13 +72,13 @@
 <script>
     $(document).ready(function () {
         $("#csv-submit").on("click", function () {
-            $("#form-exporter").attr('action', '<?php echo $action; ?>?type=csv');
-            $("#form-exporter").submit();
+            var input = $("<input>").attr("type", "hidden").attr("name", "type").val("csv");
+            $("#form-exporter").append($(input)).submit();
             e.preventDefault();
         });
         $("#excel-submit").on("click", function () {
-            $("#form-exporter").attr('action', '<?php echo $action; ?>?type=excel');
-            $("#form-exporter").submit();
+            var input = $("<input>").attr("type", "hidden").attr("name", "type").val("excel");
+            $("#form-exporter").append($(input)).submit();
             e.preventDefault();
         });
     });
