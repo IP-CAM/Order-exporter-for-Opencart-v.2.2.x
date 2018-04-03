@@ -76,7 +76,7 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         $data = array();
 
         $id_string = $this->request->post['ids'];
-        $type = $this->request->post['type'];
+        $type = $this->request->get['type'];
 
         if (empty($id_string)) {
             // TODO Add Error Notification
