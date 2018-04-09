@@ -123,6 +123,8 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
                 }
                 // TODO add size info
                 $product['size'] = '';
+                // 用购买数量覆盖库存（两个字段都是quantity）
+                $product['quantity'] = $order_products[$i]['quantity'];
 
                 $products[$i] = array_merge($order_product, $product);
             }
