@@ -121,8 +121,15 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
                 } else {
                     $product['image'] = DIR_IMAGE . 'no_image.png';
                 }
-                // TODO add size info
-                $product['size'] = '';
+                // add size info
+                $product['size'] = 'N/A';
+                $product_options = $this->model_sale_order->getOrderOptions($orderId, $order_product['order_product_id']);
+                foreach($product_options as $option) {
+                    if ($option['name'] == 'Size') {
+                        $product['size'] = $option['value'];
+                    }
+                }
+
                 // 用购买数量覆盖库存（两个字段都是quantity）
                 $product['quantity'] = $order_products[$i]['quantity'];
 
@@ -228,7 +235,6 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
         $start = 1;
         foreach ($data as $order) {
             foreach($order['products'] as $product) {
-                $size = 'N/A';
         		$end = $start + $delta - 1;
                 $objPHPExcel->getActiveSheet()
                         ->mergeCells('A'.$start.':A'.$end.'')
