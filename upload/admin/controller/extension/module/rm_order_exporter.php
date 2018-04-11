@@ -250,7 +250,7 @@ class ControllerExtensionModuleRmOrderExporter extends Controller {
                         ->setCellValue('C'.(string)($start + 5).'', $order['telephone'])
                         ->setCellValue('D'.$start.'', $product['name'])
                         ->setCellValue('D'.(string)($start + 1).'', 'Qty: '.$product['quantity'])
-                        ->setCellValue('D'.(string)($start + 2).'', 'SKU: '.$product['sku'])
+                        ->setCellValue('D'.(string)($start + 2).'', 'SKU: '.$product['model'])
                         ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
                 // add picture
                 $imagePath = $product['image'];
