@@ -1,30 +1,31 @@
-# Opencart订单数据导出插件使用说明
+# Opencart order data export plug-in instructions
 
-## 安装
-1. 下载插件安装包
-1. 上传插件安装包
-Extensions > Extension Installer > upload选择插件安装包文件，确认上传
+## Installation
+1. Download the plug-in installation package
+1. Upload the plugin installation package
+Extensions> Extension Installer> upload Select the plug-in installation package file and confirm the upload
 ![](./document/images/upload.png)
-1. 启用插件
-Extensions > extensiion > Modules找到RM Order Exporter，点击后面的魔法棒按钮，启用插件
+1. Enable plugin
+Extensions> extensiion> Modules Find RM Order Exporter, click the magic wand button behind to enable the plugin
 ![](./document/images/plugin_name.png)
 ![](./document/images/enable.png)
 
-## 使用
-1. 打开插件页面
-Extensions > extensiion > Modules找到RM Order Exporter，点击后面的铅笔按钮进入插件页面
+## Use
+1. Open the plugin page
+Extensions> extensiion> Modules Find RM Order Exporter, click the pencil button at the back to enter the plugin page
 ![](./document/images/interface.png)
-1. 从管理员界面菜单直接进入
-Sales > RM Order Exporter，点击后直接进入
+1. Enter directly from the administrator interface menu
+Sales> RM Order Exporter, click directly to enter
 ![](./document/images/interface2.png)
-1. 填写订单id，可以使用3-5表示订单id为3,4,5的订单
-在Order IDs一栏中填写需要导出的订单ID，注意不要写不存在的订单ID
-1. 选择导出文件类型
-支持Csv和Excel两种导出格式
-1. 点击导出按钮下载导出文件
-点击下面的Export进行导出并下载导出的数据文件
+1. Fill in the order id, you can use 3-5 to indicate orders with order id 3, 4, 5
+Fill in the order ID to be exported in the Order IDs column, and be careful not to write an order ID that does not exist
+1. Select the export file type
+Support two export formats: Csv and Excel
+1. Click the export button to download the export file
+Click Export below to export and download the exported data file
 ![](./document/images/plugin_interface.png)
 
 ## Trouble Shooting
-1. 上传插件时提示FTP服务器没有打开
-该问题一般发生在Opencart 2.x，解决方法是先解压document目录下的QuickFix OC2.2.0.0.zip文件，将解压得到的localcopy.ocmod.xml上传即可解决
+1. When uploading the plugin, it prompts that the FTP server is not opened
+This problem usually occurs in Opencart 2.x. The solution is to first decompress the QuickFix OC2.2.0.0.zip file in the document directory, and upload the localcopy.ocmod.xml obtained by decompression.
+
